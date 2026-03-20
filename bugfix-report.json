@@ -1,0 +1,192 @@
+{
+  "date": "2026-03-19T19:22:51.087Z",
+  "baseUrl": "http://localhost:3003",
+  "summary": {
+    "total": 30,
+    "passed": 30,
+    "failed": 0,
+    "totalTime": 2157
+  },
+  "results": [
+    {
+      "name": "0-1 관리자 로그인",
+      "passed": true,
+      "detail": "로그인 성공: 미라클복지용구",
+      "duration": 50
+    },
+    {
+      "name": "0-2 테스트 카테고리 생성",
+      "passed": true,
+      "detail": "카테고리 ID: 20",
+      "duration": 374
+    },
+    {
+      "name": "S-1 createProductJsonSchema에 imageUrl 필드 존재",
+      "passed": true,
+      "detail": "imageUrl 필드 존재 확인",
+      "duration": 0
+    },
+    {
+      "name": "S-2 updateProductJsonSchema에 imageUrl 필드 존재",
+      "passed": true,
+      "detail": "imageUrl 필드 존재 확인",
+      "duration": 0
+    },
+    {
+      "name": "S-3 products/route.ts POST — imageUrl 추출 로직",
+      "passed": true,
+      "detail": "imageUrl 추출 로직 존재 확인",
+      "duration": 1
+    },
+    {
+      "name": "S-4 products/[id]/route.ts PATCH — imageUrl 처리 로직",
+      "passed": true,
+      "detail": "imageUrl destructuring + undefined 체크 존재",
+      "duration": 0
+    },
+    {
+      "name": "1-1 /api/admin/upload POST — 이미지 업로드",
+      "passed": true,
+      "detail": "imageUrl: /uploads/2b69d3ce-58f3-4185-a16f-55eb11120b6b.jpg",
+      "duration": 15
+    },
+    {
+      "name": "1-2 제품 생성 (JSON body + imageUrl)",
+      "passed": true,
+      "detail": "제품 ID: 144 / imageUrl 정상 저장",
+      "duration": 201
+    },
+    {
+      "name": "1-3 제품 조회 시 imageUrl 존재 확인",
+      "passed": true,
+      "detail": "imageUrl: /uploads/2b69d3ce-58f3-4185-a16f-55eb11120b6b.jpg",
+      "duration": 13
+    },
+    {
+      "name": "1-4 제품 수정 — imageUrl 교체 (JSON PATCH)",
+      "passed": true,
+      "detail": "imageUrl 교체 성공: /uploads/replaced-test-image.webp",
+      "duration": 160
+    },
+    {
+      "name": "1-5 제품 수정 — imageUrl null (이미지 삭제)",
+      "passed": true,
+      "detail": "imageUrl = null 정상 저장",
+      "duration": 87
+    },
+    {
+      "name": "1-6 제품 생성 — 이미지 없이 (정상 동작 확인)",
+      "passed": true,
+      "detail": "제품 ID: 145 / imageUrl: null",
+      "duration": 153
+    },
+    {
+      "name": "1-7 5MB 초과 이미지 업로드 거부",
+      "passed": true,
+      "detail": "거부 메시지: 파일 크기는 5MB 이하여야 합니다",
+      "duration": 62
+    },
+    {
+      "name": "1-8 제품 생성 — multipart/form-data (이미지 직접 포함)",
+      "passed": true,
+      "detail": "제품 ID: 146 / imageUrl: /uploads/e027300f-0057-459c-bf19-98f78c9cb209.webp",
+      "duration": 217
+    },
+    {
+      "name": "2-A CategoryModal — 백드롭 onClick 제거됨",
+      "passed": true,
+      "detail": "백드롭 onClick 핸들러 제거 확인",
+      "duration": 1
+    },
+    {
+      "name": "2-B CategoryModal — dirty check (confirm) 존재",
+      "passed": true,
+      "detail": "confirm + isDirty 체크 존재 확인",
+      "duration": 0
+    },
+    {
+      "name": "2-C CategoryModal — forceClose/safeClose 분리",
+      "passed": true,
+      "detail": "submit→forceClose / 취소→safeClose 분리 확인",
+      "duration": 0
+    },
+    {
+      "name": "2-D CategoryModal — 취소 버튼 onClick=safeClose",
+      "passed": true,
+      "detail": "취소 버튼 → safeClose 확인",
+      "duration": 0
+    },
+    {
+      "name": "2-E CategoryModal — ESC 키 → safeClose",
+      "passed": true,
+      "detail": "ESC → safeClose 확인",
+      "duration": 0
+    },
+    {
+      "name": "2-A ProductModal — 백드롭 onClick 제거됨",
+      "passed": true,
+      "detail": "백드롭 onClick 핸들러 제거 확인",
+      "duration": 0
+    },
+    {
+      "name": "2-B ProductModal — dirty check (confirm) 존재",
+      "passed": true,
+      "detail": "confirm + isDirty 체크 존재 확인",
+      "duration": 0
+    },
+    {
+      "name": "2-C ProductModal — forceClose/safeClose 분리",
+      "passed": true,
+      "detail": "submit→forceClose / 취소→safeClose 분리 확인",
+      "duration": 0
+    },
+    {
+      "name": "2-D ProductModal — 취소 버튼 onClick=safeClose",
+      "passed": true,
+      "detail": "취소 버튼 → safeClose 확인",
+      "duration": 0
+    },
+    {
+      "name": "2-E ProductModal — ESC 키 → safeClose",
+      "passed": true,
+      "detail": "ESC → safeClose 확인",
+      "duration": 0
+    },
+    {
+      "name": "3-0 orderUrl 설정 (테스트 URL)",
+      "passed": true,
+      "detail": "orderUrl: http://localhost:3003/order/test",
+      "duration": 176
+    },
+    {
+      "name": "3-1 GET /api/admin/settings/qrcode — PNG 반환",
+      "passed": true,
+      "detail": "PNG 정상 / size: 3175 bytes",
+      "duration": 27
+    },
+    {
+      "name": "3-2 QR 이미지 파일 저장 및 검증",
+      "passed": true,
+      "detail": "QR 이미지 크기: 3175 bytes — 정상",
+      "duration": 24
+    },
+    {
+      "name": "3-3 orderUrl 미설정 시 404 반환",
+      "passed": true,
+      "detail": "orderUrl null → 404 분기 존재 확인",
+      "duration": 0
+    },
+    {
+      "name": "3-4 QR route — toDataURL 사용 확인 (canvas 의존성 제거)",
+      "passed": true,
+      "detail": "toDataURL + base64 디코딩 패턴 확인",
+      "duration": 1
+    },
+    {
+      "name": "CLN-1 테스트 카테고리 삭제 (cascade)",
+      "passed": true,
+      "detail": "카테고리 20 삭제 완료",
+      "duration": 595
+    }
+  ]
+}

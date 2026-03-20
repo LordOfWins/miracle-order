@@ -1,0 +1,58 @@
+/* [원인] 모바일 드로어 전환 애니메이션 없음 + iOS 하단 safe area 미처리 */
+/* [수정] slide-in 애니메이션 + safe area padding 유틸리티 추가 */
+
+/* src/app/globals.css */
+
+@import "tailwindcss";
+
+/* 가로 스크롤바 숨김 유틸리티 */
+@utility scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* 모바일 사이드바 드로어 슬라이드 인 애니메이션 */
+@keyframes slide-in-left {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.animate-slide-in-left {
+  animation: slide-in-left 0.25s ease-out;
+}
+
+/* iOS safe area 하단 패딩 */
+@utility pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+html {
+  font-size: 18px;
+}
+
+body {
+  font-size: 1.125rem;
+  line-height: 1.75;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button,
+[role="button"],
+input[type="submit"] {
+  min-height: 52px;
+}
+
+input,
+textarea,
+select {
+  font-size: 1.125rem;
+  min-height: 48px;
+}

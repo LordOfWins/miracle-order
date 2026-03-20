@@ -1,0 +1,142 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+// ─── 관리자 ───
+model Admin {
+  id        Int      @id @default(autoincrement())
+  loginId   String   @unique @map("login_id") @db.VarChar(50)
+  password  String   @db.VarChar(255)
+  name      String   @db.VarChar(50)
+  phone     String   @db.VarChar(20)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  categories Category[]
+  products   Product[]
+  setting    AdminSetting?
+  orders     Order[]
+
+  @@map("admin")
+}
+
+// ─── 관리자 설정 (수신번호, 주문서URL, QR) ───
+model AdminSetting {
+  id           Int      @id @default(autoincrement())
+  adminId      Int      @unique @map("admin_id")
+  receivePhone String   @map("receive_phone") @db.VarChar(20)
+  orderUrl     String?  @map("order_url") @db.VarChar(500)
+  qrCodeUrl    String?  @map("qr_code_url") @db.VarChar(500)
+  noticeText   String?  @map("notice_text") @db.Text // 공지 및 참고사항
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  admin Admin @relation(fields: [adminId], references: [id], onDelete: Cascade)
+
+  @@map("admin_setting")
+}
+
+// ─── 카테고리 (대분류) ───
+model Category {
+  id        Int      @id @default(autoincrement())
+  adminId   Int      @map("admin_id")
+  name      String   @db.VarChar(100)
+  sortOrder Int      @default(0) @map("sort_order")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  admin    Admin     @relation(fields: [adminId], references: [id], onDelete: Cascade)
+  products Product[]
+
+  @@index([adminId, sortOrder])
+  @@map("category")
+}
+
+// ─── 제품 ───
+model Product {
+  id          Int      @id @default(autoincrement())
+  categoryId  Int      @map("category_id")
+  adminId     Int      @map("admin_id")
+  name        String   @db.VarChar(200)
+  price       Int      @default(0)
+  imageUrl    String?  @map("image_url") @db.VarChar(500)
+  description String?  @db.Text
+  note        String?  @db.Text
+  sortOrder   Int      @default(0) @map("sort_order")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  category   Category    @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  admin      Admin       @relation(fields: [adminId], references: [id], onDelete: Cascade)
+  orderItems OrderItem[]
+
+  @@index([categoryId, sortOrder])
+  @@index([adminId])
+  @@map("product")
+}
+
+// ─── 임시 이미지 (서류사진 24시간 후 삭제용) ───
+model TempImage {
+  id        String   @id @default(uuid()) @db.VarChar(36)
+  fileName  String   @map("file_name") @db.VarChar(255)
+  filePath  String   @map("file_path") @db.VarChar(500)
+  fileSize  Int      @map("file_size")
+  mimeType  String   @map("mime_type") @db.VarChar(50)
+  expiresAt DateTime @map("expires_at")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([expiresAt])
+  @@map("temp_image")
+}
+
+// ─── 주문서 ───
+model Order {
+  id                 Int      @id @default(autoincrement())
+  adminId            Int      @map("admin_id")
+  requestNote        String?  @map("request_note") @db.Text
+  centerName         String   @map("center_name") @db.VarChar(150)
+  writerPhone        String   @map("writer_phone") @db.VarChar(20)
+  recipientName      String   @map("recipient_name") @db.VarChar(50)
+  gender             String   @db.VarChar(10)
+  copayType          String?  @map("copay_type") @db.VarChar(20) // 본부유 | 본부대체 | 본부50%할인
+  contactPhone1      String?  @map("contact_phone_1") @db.VarChar(20)
+  contactPhone2      String?  @map("contact_phone_2") @db.VarChar(20)
+  roadAddress        String?  @map("road_address") @db.VarChar(255)
+  detailAddress      String?  @map("detail_address") @db.VarChar(255)
+  zipCode            String?  @map("zip_code") @db.VarChar(10)
+  tempImageIds       String?  @map("temp_image_ids") @db.Text
+  smsStatus          String   @default("PENDING") @map("sms_status") @db.VarChar(20)
+  smsMessage         String?  @map("sms_message") @db.Text
+  createdAt          DateTime @default(now()) @map("created_at")
+  updatedAt          DateTime @updatedAt @map("updated_at")
+
+  admin      Admin       @relation(fields: [adminId], references: [id], onDelete: Cascade)
+  orderItems OrderItem[]
+
+  @@index([adminId, createdAt])
+  @@map("order_sheet")
+}
+
+model OrderItem {
+  id          Int      @id @default(autoincrement())
+  orderId     Int      @map("order_id")
+  productId   Int      @map("product_id")
+  categoryId  Int      @map("category_id")
+  productName String   @map("product_name") @db.VarChar(200)
+  price       Int      @default(0)
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Restrict)
+
+  @@index([orderId])
+  @@index([productId])
+  @@index([categoryId])
+  @@map("order_item")
+}
