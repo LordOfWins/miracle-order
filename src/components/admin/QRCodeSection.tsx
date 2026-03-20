@@ -112,8 +112,8 @@ export default function QRCodeSection() {
       )}
 
       {!loading && !error && qrDataUrl && (
-        <div className="flex flex-col items-center gap-4">
-          <div className="border-2 border-gray-200 rounded-lg p-4 bg-white">
+        <div className="flex flex-col items-stretch gap-4">
+          <div className="border-2 border-gray-200 rounded-lg p-4 bg-white self-center">
             <img
               src={qrDataUrl}
               alt="주문서 QR 코드"
@@ -124,7 +124,7 @@ export default function QRCodeSection() {
           </div>
 
           {orderUrl && (
-            <div className="w-full max-w-md">
+            <div className="w-full">
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 주문서 URL
               </label>
@@ -133,11 +133,12 @@ export default function QRCodeSection() {
                   type="text"
                   readOnly
                   value={orderUrl}
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 text-sm text-gray-600 truncate"
+                  className="min-w-0 flex-1 px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 text-sm text-gray-600 truncate"
                 />
                 <button
                   onClick={handleCopyUrl}
-                  className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm hover:bg-gray-200 whitespace-nowrap"
+                  className="shrink-0 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm hover:bg-gray-200 whitespace-nowrap"
+                  style={{ minHeight: '44px' }}
                 >
                   복사
                 </button>
@@ -145,7 +146,7 @@ export default function QRCodeSection() {
             </div>
           )}
 
-          <div className="flex gap-3">
+          <div className="flex gap-3 justify-center">
             <button
               onClick={handleDownload}
               className="px-5 py-2.5 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors"
@@ -160,7 +161,7 @@ export default function QRCodeSection() {
             </button>
           </div>
 
-          <p className="text-xs text-gray-400 text-center">
+          <p className="text-xs text-gray-400 text-center self-center">
             이 QR을 스캔하면 고객이 주문서 페이지로 이동합니다
             <br />
             인쇄하여 매장에 비치하거나 카카오톡으로 공유하세요

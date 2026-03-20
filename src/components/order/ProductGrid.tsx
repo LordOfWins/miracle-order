@@ -109,6 +109,7 @@ export default function ProductGrid({
                         className="object-cover"
                         sizes="112px"
                         loading="lazy"
+                        unoptimized
                       />
                     ) : (
                       <div className="flex h-full w-full items-center justify-center text-base font-medium text-gray-500">

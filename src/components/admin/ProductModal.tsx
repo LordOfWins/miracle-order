@@ -208,6 +208,7 @@ export default function ProductModal({
                     alt="제품 이미지"
                     fill
                     className="object-contain"
+                    unoptimized
                   />
                   <button
                     type="button"

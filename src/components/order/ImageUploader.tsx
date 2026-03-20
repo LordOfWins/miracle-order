@@ -176,6 +176,7 @@ export default function ImageUploader({
                     sizes="(max-width: 640px) 50vw, 33vw"
                     // [수정] lazy loading 명시
                     loading="lazy"
+                    unoptimized
                   />
                 </div>
                 <div className="p-2">

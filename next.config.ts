@@ -7,6 +7,11 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   serverExternalPackages: ['@prisma/client', 'mariadb'],
   images: {
+    localPatterns: [
+      {
+        pathname: '/uploads/**',
+      },
+    ],
     remotePatterns: [
       {
         protocol: 'https',
