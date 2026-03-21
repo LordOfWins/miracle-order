@@ -1,9 +1,12 @@
+// [원인] 탭 선택 시 scrollIntoView 호출이 없어서 "수동휠체어"처럼 긴 이름의 탭이 스크롤 영역 밖에서 잘리거나 밀림 + sm:flex-wrap이 모바일에서 의도치 않게 줄바꿈 유발
+// [수정] 탭 클릭 시 scrollIntoView({ inline: 'center' }) 자동 호출 + sm:flex-wrap 제거하고 항상 가로 스크롤 + snap-x mandatory 적용
+
 // src/components/order/CategoryTabs.tsx
 
 'use client'
 
 import type { PublicCategoryItem } from '@/types/order'
-import { useCallback, useRef } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 
 interface CategoryTabsProps {
   categories: PublicCategoryItem[]
@@ -18,6 +21,22 @@ export default function CategoryTabs({
 }: CategoryTabsProps) {
   const scrollRef = useRef<HTMLDivElement>(null)
   const tabRefs = useRef<Map<number, HTMLButtonElement>>(new Map())
+
+  // 선택된 탭이 바뀔 때마다 해당 탭을 뷰포트 중앙으로 스크롤
+  useEffect(() => {
+    if (selectedCategoryId == null) return
+    const btn = tabRefs.current.get(selectedCategoryId)
+    if (btn) {
+      // requestAnimationFrame으로 iOS Safari 렌더 타이밍 보정
+      requestAnimationFrame(() => {
+        btn.scrollIntoView({
+          behavior: 'smooth',
+          block: 'nearest',
+          inline: 'center',
+        })
+      })
+    }
+  }, [selectedCategoryId])
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent, index: number) => {
@@ -79,11 +98,19 @@ export default function CategoryTabs({
         </span>
       </div>
 
+      {/*
+        핵심 수정 포인트:
+        1. sm:flex-wrap sm:overflow-x-visible 제거 → 항상 가로 스크롤
+        2. snap-x snap-mandatory 추가 → 탭이 정확한 위치에 멈춤
+        3. -webkit-overflow-scrolling: touch → iOS Safari 관성 스크롤
+        4. overscroll-x-contain → 스크롤 전파 방지
+      */}
       <div
         ref={scrollRef}
-        className="flex flex-wrap gap-2 pb-2"
+        className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide overscroll-x-contain snap-x snap-mandatory"
         role="tablist"
         aria-label="카테고리 목록"
+        style={{ WebkitOverflowScrolling: 'touch' }}
       >
         {categories.map((category, index) => {
           const selected = selectedCategoryId === category.id
@@ -99,12 +126,12 @@ export default function CategoryTabs({
               tabIndex={selected ? 0 : -1}
               onClick={() => onSelect(category.id)}
               onKeyDown={(e) => handleKeyDown(e, index)}
-              className={`rounded-xl border px-3 py-2 text-sm font-semibold transition outline-none focus-visible:ring-4 focus-visible:ring-blue-200 md:px-5 md:py-3.5 md:text-lg md:rounded-2xl ${
+              className={`flex-shrink-0 snap-center whitespace-nowrap rounded-2xl border px-5 py-3.5 text-lg font-semibold transition outline-none focus-visible:ring-4 focus-visible:ring-blue-200 ${
                 selected
                   ? 'border-blue-700 bg-blue-700 text-white'
                   : 'border-gray-300 bg-white text-gray-900 hover:border-blue-400 hover:bg-blue-50'
               }`}
-              style={{ minHeight: '44px' }}
+              style={{ minHeight: '52px', minWidth: '52px' }}
             >
               {category.name}
             </button>
