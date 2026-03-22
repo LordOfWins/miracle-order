@@ -471,7 +471,7 @@ export default function OrderForm() {
         <fieldset className="space-y-2">
           <legend className="block font-semibold text-gray-900">본인부담금 (선택)</legend>
           <input type="hidden" {...register('copayType')} />
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+          <div className="grid grid-cols-3 gap-3">
             {(['본부유', '본부대체', '본부50%할인'] as const).map((value) => {
               const selected = watch('copayType') === value
               return (
